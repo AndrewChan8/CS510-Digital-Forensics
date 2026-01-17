@@ -1,4 +1,4 @@
-# Project 1 Documentation
+# Project 1 Documentation - Andrew Chan
 ## 1. Objective
 The objective of this project is to perform a forensic workflow starting with a VirtualBox disk image, .VDI, o produce a verified forensic image, .E01, and to document the integrity verification at each step. The goal is to presere evidence integrity while creating working and forensic copoies for analysis
 
