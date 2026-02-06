@@ -1,0 +1,3 @@
+e09fbc2d5ac83b0624d6cc7a017d7b1b853ee2f9996804338ec9db81ff10e01b  ToShare.zip
+1215efedc33651dc82d4f0bb31fc86a09ddc358293ea2d5e8a8240f072538853  extracted/ToShare.raw
+extracted/ToShare.raw: DOS/MBR boot sector
