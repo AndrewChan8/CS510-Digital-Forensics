@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [['$','$'], ['\\(','\\)']]}});</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS": {"availableFonts":["TeX"],"scale": 150}});</script>
+
+<style>
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+	font-size: 14px;
+	padding: 0 12px;
+	line-height: 22px;
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	color: #4080D0;
+	text-decoration: none;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+	font-size: inherit;
+	line-height: auto;
+}
+
+a:hover {
+	color: #4080D0;
+	text-decoration: underline;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left: 5px solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 14px;
+	line-height: 19px;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+.mac code {
+	font-size: 12px;
+	line-height: 18px;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+/** Theming */
+
+.vscode-light,
+.vscode-light pre code {
+	color: rgb(30, 30, 30);
+}
+
+.vscode-dark,
+.vscode-dark pre code {
+	color: #DDD;
+}
+
+.vscode-high-contrast,
+.vscode-high-contrast pre code {
+	color: white;
+}
+
+.vscode-light code {
+	color: #A31515;
+}
+
+.vscode-dark code {
+	color: #D7BA7D;
+}
+
+.vscode-light pre:not(.hljs),
+.vscode-light code > div {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre:not(.hljs),
+.vscode-dark code > div {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre:not(.hljs),
+.vscode-high-contrast code > div {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+.vscode-light blockquote,
+.vscode-dark blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.vscode-high-contrast blockquote {
+	background: transparent;
+	border-color: #fff;
+}
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+</style>
+
+</head>
+<body>
+<h1 id="assignment-4---memory-forensics">Assignment 4 - Memory Forensics - Andrew Chan</h1>
+<h3 id="environment-and-setup">Environment and Setup</h3>
+<p>Clone the Volatility3 repository from GitHub:</p>
+<pre class="hljs"><code><div>https://github.com/volatilityfoundation/volatility3
+</div></code></pre>
+<p>Download the Windows symbol files:</p>
+<pre class="hljs"><code><div>https://downloads.volatilityfoundation.org/volatility3/symbols/windows.zip
+</div></code></pre>
+<p>Uncompress the downloaded archive and move the extracted windows directory into the Volatility symbols directory:</p>
+<pre class="hljs"><code><div>volatility3/volatility3/symbols/windows
+</div></code></pre>
+<p>Open a terminal in the root directory of the Volatility repository which should just be volatility3</p>
+<p>Run the following command to verify that Volatility is installed correctly:</p>
+<pre class="hljs"><code><div>python3 vol.py --help
+</div></code></pre>
+<p>If plugin dependency errors appear, install the required modeuls using pip:</p>
+<pre class="hljs"><code><div>pip install pefile yara-python pycryptodome
+</div></code></pre>
+<p>A python virtual enevironment was used to isolate dependencies and prevent system level conflicts.</p>
+<h3 id="download-and-prepare-memory-image">Download and prepare memory image</h3>
+<p>The memory image used in this investigation was downlaoded and extracted from the provided course dataset.</p>
+<p>The compressed file memory_dump.hz was decompressed using the following command:</p>
+<pre class="hljs"><code><div>gunzip memory_dump.gz
+</div></code></pre>
+<p>This produced the raw memory image, <code>memory_dump</code></p>
+<p>The extracted memory image has a size of around 6.8 GB</p>
+<p>To verify that Volatility could correctly parse the memory image, the follow command was executed:</p>
+<pre class="hljs"><code><div>python3 vol.py -f ~/Downloads/extracted/memory_dump banners.Banners
+</div></code></pre>
+<p>Successful execution of this command will confirm that the memory image could be read by Volatility and that the Windows kernel banner could be detected.</p>
+<p>Next, the process list was examined to make sure that the analysis environment was functioning properly:</p>
+<pre class="hljs"><code><div>python3 vol.py -f ~/Downloads/extracted/memory_dump windows.pslist.PsList
+</div></code></pre>
+<p>After confirming that the process list could be extractd successfully, the memory image was ready for forensic investigation.</p>
+<h3 id="memory-forensics-analysis-memorydump">Memory Forensics Analysis: memory_dump</h3>
+<p>Data Integrity</p>
+<p>Filename: memory_dump
+SHA-256 Hash:
+4d649e4448c3b513b1aa688bbf421a2d95cf4b18fc3c935f12f56f8cac91f07a</p>
+<p>The SHA-256 hash of the extracted memory image was calculated prior to analysis to ensure the integrity of the forensic evidence. Hash verification establishes a bseline fingerprint for the file and confirms that the memory image remained unchanged throughout the investigation.</p>
+<ol>
+<li>Suspicious Process Identification: PID 8812, ChromeX.exe</li>
+</ol>
+<pre class="hljs"><code><div>Command Used:
+python3 vol.py -f ~/Downloads/extracted/memory_dump windows.pslist.PsList
+</div></code></pre>
+<p>The system's process list revealed a process named ChromeX.exe with PID 8812. This process is considered suspicious because its name closely resembles the legit Google Chrome browser but contains and additional &quot;X&quot;. This naming pattern is commonly used by malware to hide as trusted software while avoiding immediate detection.</p>
+<p>Upon further inspection of the process create time showed the ChromeX.exe started at 14:18:07 UTC which is significantly later than core system processes that start during system boot. This behaviour suggested that the executable was launched manually or by a user level action rather than by the operating system.</p>
+<ol start="2">
+<li>Full Executable Path: C:\Users\developer\Downloads\ChromeX.exe</li>
+</ol>
+<p>Command Used:</p>
+<pre class="hljs"><code><div>python3 vol.py -f ~/Downloads/extracted/memory_dump windows.cmdline.CmdLine --pid 8812
+</div></code></pre>
+<p>The cmdline plugin was used to retrieve the command line arguments associated with the suspicious process.</p>
+<p>The output showed that ChromeX.exe was executed from the following path</p>
+<pre class="hljs"><code><div>C:\Users\developer\Downloads\ChromeX.exe
+</div></code></pre>
+<p><img src="image.png" alt="alt text">
+This location is important since the Downloads directory is a common location for user downloaded files and malware. Legit applications are usually installed in directories like:
+C:\Program Files
+C:\Program Files (x86)</p>
+<p>Running executable directly from a user's Downloads folder is unusual for legit software and therefore strengthens the suspicion that the ChromeX.exe is a malicious process that's hiding as a legit browser process.</p>
+<ol start="3">
+<li>Process Behavior and Loaded Libraries</li>
+</ol>
+<p>Command Used:</p>
+<pre class="hljs"><code><div>python3 vol.py -f ~/Downloads/extracted/memory_dump windows.dlllist.DllList --pid 8812
+</div></code></pre>
+<p>The dlllist plugin was used to examine the dynamic link libraries loaded by the suspicious process ChromeX.exe. Loaded libraries provide insight into the capabilities and behavior of a process.</p>
+<p>Analysis revealed that the process loaded several Windows system libraries including:</p>
+<p>ucrtbase.dll
+C:\Windows\System32\ucrtbase.dll</p>
+<p>mswsock.dll
+C:\Windows\System32\mswsock.dll
+<img src="image-1.png" alt="alt text"></p>
+<p>The presence of mswsock.dll is particularly significant because this library provides Windows networking functionality through the Winsock API. Malware can usually load netowkring libarries in order to estblish communication with external systems.
+The loading of netowking related libaries indicate that ChromeX.exe likely possessed the capability to initiate outbout network connections which is consistent with the behavior of remote access malware or command and control implants.</p>
+<ol start="4">
+<li>Extraction of Suspicious Executable from Memory</li>
+</ol>
+<p>Command Used:</p>
+<pre class="hljs"><code><div>python3 vol.py -f ~/Downloads/extracted/memory_dump windows.dumpfiles.DumpFiles --pid 8812
+</div></code></pre>
+<p>The dumpfiles plugin was used to extract file objects associated with the suspicious process ChromeX.exe directly from the memory image. This allows investigators to recover executable artifacts that were loaded into memory at the time the system snapshot was captured.</p>
+<p>The following files were successfully recovered:</p>
+<pre class="hljs"><code><div>file.0x860fd50276c0.0x860fccddecb0.DataSectionObject.ChromeX.exe.dat
+file.0x860fd50276c0.0x860fd50f8a20.ImageSectionObject.ChromeX.exe.img
+</div></code></pre>
+<p>These files represent the data and executable sections of the ChromeX.exe binary as it existed in system memory.</p>
+<p>To preserve the integrity of the recovered artifacts, we calculated SHA-256 hashes:</p>
+<pre class="hljs"><code><div>SHA-256: 0758ae0fedf4b4345c3d879481a6338b4980c9ab64bb591f4a736a5547975515
+SHA-256: 09e2a819247a75b0de5cad6fe0a2812f38582ffdcef705edbe737678bb55299b
+</div></code></pre>
+<ol start="5">
+<li>Indicators Discovered in the Extracted Executable</li>
+</ol>
+<p>Command Used:</p>
+<pre class="hljs"><code><div>strings file.*ChromeX.exe.* | grep -E &quot;13.60|WriteProcessMemory|ZwOpenProcess&quot;
+</div></code></pre>
+<p>To further analyze the recovered executable, the strings utility was used to extract human-readable text embedded within the binary. This technique revealed internal metadata, API usage, and network indicators that may not be immediately noticable through standard memory analysis tools.</p>
+<p>The analysis showed several suspicious artifacts including:</p>
+<p>13.60.193.87
+WriteProcessMemory
+ZwOpenProcess
+htb.pdb</p>
+<p><img src="image-2.png" alt="alt text"></p>
+<p>The IP address 13.60.193.87 appears directly within the executable, which suggests that the program may attempt to communicate with a remote host. Hard-coded IP addresses can be commonly used by malware to establish communication with command-and-control infrastructure.</p>
+<p>The presence of the Windows API functions WriteProcessMemory and ZwOpenProcess is also notable. These functions are frequently used by malware for process injection and memory manipulation, allowing malicious code to execute inside other processes.</p>
+<p>Also, the string htb.pdb references a debugging symbol file generated during compilation. Embedded debugging paths can reveal developer build environments and further suggest that the binary was custom-built rather than part of a legitimate software distribution.</p>
+<br>
+<h3 id="conclusion">Conclusion</h3>
+<p>The forensic investigation of the provided memory image identified a suspicious executable named ChromeX.exe with PID 8812. The process name closely mimics the legitimate Chrome browser but contains an additional character, indicating a likely attempt at trying to blend in.</p>
+<p>Analysis revealed that the executable was launched from C:\Users\developer\Downloads, which is an unusual location for legitimate system applications. Examination of the process environment confirmed the loading of networking-related libraries and the presence of system handles associated with console interaction.</p>
+<p>The executable was successfully extracted from memory using Volatility's dumpfiles plugin, and cryptographic hashes were generated to preserve the recovered artifacts. Further analysis of the binary revealed embedded indicators including the IP address 13.60.193.87 and Windows API calls commonly used for process manipulation.</p>
+<p>Based on what we've found, we conclude that ChromeX.exe is highly likely to be a malicious program designed to hide as a legitimate application while communicating with an external host and performing potentially harmful actions on the system.</p>
+
+</body>
+</html>

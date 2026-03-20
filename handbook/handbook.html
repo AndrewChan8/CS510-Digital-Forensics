@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [['$','$'], ['\\(','\\)']]}});</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS": {"availableFonts":["TeX"],"scale": 150}});</script>
+
+<style>
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+	font-size: 14px;
+	padding: 0 12px;
+	line-height: 22px;
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	color: #4080D0;
+	text-decoration: none;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+	font-size: inherit;
+	line-height: auto;
+}
+
+a:hover {
+	color: #4080D0;
+	text-decoration: underline;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left: 5px solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 14px;
+	line-height: 19px;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+.mac code {
+	font-size: 12px;
+	line-height: 18px;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+/** Theming */
+
+.vscode-light,
+.vscode-light pre code {
+	color: rgb(30, 30, 30);
+}
+
+.vscode-dark,
+.vscode-dark pre code {
+	color: #DDD;
+}
+
+.vscode-high-contrast,
+.vscode-high-contrast pre code {
+	color: white;
+}
+
+.vscode-light code {
+	color: #A31515;
+}
+
+.vscode-dark code {
+	color: #D7BA7D;
+}
+
+.vscode-light pre:not(.hljs),
+.vscode-light code > div {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre:not(.hljs),
+.vscode-dark code > div {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre:not(.hljs),
+.vscode-high-contrast code > div {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+.vscode-light blockquote,
+.vscode-dark blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.vscode-high-contrast blockquote {
+	background: transparent;
+	border-color: #fff;
+}
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+</style>
+
+</head>
+<body>
+<h1 id="digital-forensics-handbook---andrew-chan">Digital Forensics Handbook - Andrew Chan</h1>
+<h1 id="table-of-contents">Table of Contents</h1>
+<ul>
+<li><a href="#project-1">Project 1 – Forensic Disk Imaging</a></li>
+<li><a href="#project-2-hypervisor-disk-image-examination-report">Project 2 – Hypervisor Disk Image Examination</a></li>
+<li><a href="#project-3-creating-and-analyzing-zfs-pools">Project 3 – Creating and Analyzing ZFS Pools</a></li>
+<li><a href="#assignment-4---memory-forensics">Project 4 – Memory Forensics</a></li>
+</ul>
+<h1 id="project-1">Project 1</h1>
+<h2 id="1-objective">1. Objective</h2>
+<p>The objective of this project is to perform a forensic workflow starting with a VirtualBox disk image, .VDI, o produce a verified forensic image, .E01, and to document the integrity verification at each step. The goal is to presere evidence integrity while creating working and forensic copoies for analysis</p>
+<h2 id="2-environment-and-tools">2. Environment and Tools</h2>
+<p><strong>OS:</strong> Windows (PowerShell)
+<strong>Hypervisor Image Format:</strong> VirtualBox (.vdi)
+<strong>Tools Used:</strong></p>
+<ul>
+<li>PowerShell <code>get-filehash</code></li>
+<li>QEMU <code>qemu-img</code></li>
+<li>EWT Tools <code>ewfacquire</code>, <code>ewfverify</code></li>
+</ul>
+<p>All of these commands were executed locally within the virtual machine through HackTheBox</p>
+<h2 id="3-evidence-intake">3. Evidence Intake</h2>
+<p>The original evidence file provided was a WirtualBox disk image.</p>
+<ul>
+<li><strong>Filename:</strong> <code>FreeBSD_Forensics_PartI.vdi</code></li>
+</ul>
+<p>A SHA-256 hash was calculated to create a baseline integrity value before any changes were made</p>
+<p><strong>Command Used:</strong>
+<code>get-filehash ./FreeBSD_Forensics_PartI.vdi -algorithm sha256</code></p>
+<p><strong>Result:</strong></p>
+<ul>
+<li>SHA-256 hash created and stored within a new file named <code>FreeBSD_Forensics_PartI.sha256sum</code></li>
+</ul>
+<p>This hash will then serve as a reference value for the original evidence</p>
+<h2 id="4-conversion-to-raw">4. Conversion to RAW</h2>
+<p>To create forensic tooling compatibility, the VDI image will be converted into a RAW disk image using QEMU.</p>
+<p><strong>Command Used:</strong>
+<code>C:\&quot;Program Files&quot;\qemu\qemu-img.exe convert -p -f vdi -O raw ./FreeBSD_Forensics_PartI.vdi ./FreeBSD_Forensics_PartI.raw</code></p>
+<p>The RAW image represents a sector by sector disk layot which is suitable for forensic usage.</p>
+<h2 id="5-raw-disk-validation">5. RAW Disk Validation</h2>
+<p>The RAW image was inspected and hashed to confirm successful conversion</p>
+<p><strong>Disk Information:</strong>
+<code>C:\&quot;Program Files&quot;\qemu\qemu-img.exe info ./FreeBSD_Forensics_PartI.raw</code></p>
+<p><strong>Checksum Calculation:</strong>
+<code>get-filehash .\FreeBSD_Forensics_PartI.raw -algorithm sha256 &gt; .\FreeBSD_Forensics_PartI-RAW.sha256sum</code>
+<strong>Result:</strong></p>
+<ul>
+<li>SHA-256 hash recorded and stored in a new file named <code>FreeBSD_Forensics_PartI-RAW.sha256sum</code></li>
+</ul>
+<p>The SHA-256 hash of the RAW image is different from the VDI hash. This makes sense because there is differences in file format and metadata layout.</p>
+<h2 id="6-forensic-image-creation-e01">6. Forensic Image Creation (E01)</h2>
+<p>The RAW image was acquired into the EWF (E01) using <code>ewfacquire</code>, which produced a forensic image with embedded metadata and integrity checks.</p>
+<p><strong>Command Used:</strong>
+<code>ewfacquire ./FreeBSD_Forensics_PartI.raw</code></p>
+<p><strong>Acquisition Metadata:</strong>
+Examiner: Andrew
+Case Number: 1
+Evidence Number: 1
+Media Type: Fixed Disk
+Image Format: EnCase 6 (.E01)
+Compression: Deflate
+Sector Size: 512 bytes</p>
+<p>The acquisition completed successfully without any errors.</p>
+<h2 id="7-forensic-image-verification">7. Forensic Image Verification</h2>
+<p>The integrity of the E01 image was verified using <code>ewfverify</code></p>
+<p><strong>Command Used:</strong>
+<code>ewfverify FreeBSD_Forensics_PartI.E01</code></p>
+<p><strong>Result:</strong>
+MD5 hash stored in E01: <code>a37fd5124513584ef27e421f37e522f1</code>
+MD5 hash calculated during verification: <code>a37fd5124513584ef27e421f37e522f1</code>
+Verfication Stats: SUCCESS</p>
+<p>This confirms that the forensic image has not been altered since acquisition.</p>
+<h2 id="8-explanation-of-hash-differences">8. Explanation of Hash Differences</h2>
+<p>The SHA-256 hashes of the <code>.vdi</code> and <code>.raw</code> files are difference because the conversion process changes the file structure, metadata, and block layout. However, the forensic integrity is preserved because the E01 image embeds its own hash values, which we saw were successfully verified using <code>ewfverify</code>.</p>
+<h2 id="9-what-i-learned">9. What I learned</h2>
+<p>This project helped me understand the concepts of general forensics and how we can use hasing algorithms like SHA-256 as a checksum. I also learned things like Evidence intake, working copies, and forensic images. One big takeway is that forensic validity is created through repeatable verification rather than just matching hashes across different formats. Tools like <code>ewfverify</code> are able to provide stronger guarantees rather than simple file hashing by validating embedded integrity data.</p>
+<p>Some things that I learned that aren't related directly to the project is how the Windows filesystem paths differe from Linux. Windows uses volume specific root paths like <code>C:\</code> rather than a single unified root. Also, I learned that PowerShell doesn't rely on the <code>~</code> home directory convention in the same way that Linux does.</p>
+<h2 id="10-conclusion">10. Conclusion</h2>
+<p>All required steps for forensic imaging and preparation were completed successfully. The evidence pipeline preserved integrity at every stage which resulted in a verified forensic image that is suitable for further analysis in tools like Autopsy.</p>
+<h1 id="project-2-hypervisor-disk-image-examination-report">Project 2: Hypervisor Disk Image Examination Report</h1>
+<h2 id="examination-of-group-5-disk-image">Examination of Group 5 Disk Image</h2>
+<h2 id="1-case-overview">1. Case Overview</h2>
+<p>Our team (Team 7) received a compressed archive (<code>ToShare.zip</code>) containing a Linux virtual disk image (<code>ToShare.raw</code>) for forensic examination. The objective was to reconstruct user activity, identify structured artifacts, and evaluate potential cross-account behavior within the system. The image was analyzed using Autopsy, focusing on filesystem artifacts, user activity reconstruction, credential exposure, and session transitions between accounts.
+<img src="image.png" alt="alt text"></p>
+<h2 id="2-evidence-handling-integrity-preservation">2. Evidence Handling &amp; Integrity Preservation</h2>
+<p>Before we began the analysis, we extracted ToShare.raw from the provided archive and generated SHA-256 hashes for both the .zip file and the extracted .raw image. These hashes were recorded before any forensic examination began to preserve evidentiary integrity and maintain reproducibility. The raw disk image was ingested into Autopsy in a read-only forensic workflow. No modifications were made to the source image during analysis.</p>
+<p>This process aligns with forensic best practices for:</p>
+<ul>
+<li>Integrity validation</li>
+<li>Chain-of-custody preservation</li>
+<li>Reproducibility of results
+<img src="image-1.png" alt="alt text"></li>
+</ul>
+<h2 id="3-system-identification">3. System Identification</h2>
+<p>Analysis of /etc/debian_version and filesystem metadata confirmed:</p>
+<ul>
+<li>Operating System: Debian Linux</li>
+<li>Filesystem: EXT4
+The EXT4 journaled filesystem is relevant because it preserves metadata timestamps (MAC times), which were used in timeline reconstruction.</li>
+</ul>
+<p><img src="image-2.png" alt="alt text"></p>
+<h2 id="4-user-accounts-system-structure">4. User Accounts &amp; System Structure</h2>
+<p>Inspection of /etc/passwd revealed two interactive user accounts</p>
+<ul>
+<li>user (UID 1000)</li>
+<li>squirrel (UID 1001)
+Both accounts were configured with /bin/bash, confirming interactive shell access. This established the foundation for evaluating cross-account behavior.</li>
+</ul>
+<p><img src="image-3.png" alt="alt text"></p>
+<h2 id="5-structured-content-creation-%E2%80%93-user-account">5. Structured Content Creation – User Account</h2>
+<p><strong>5.1 Image Artifacts</strong></p>
+<p>Within /home/user/Pictures/, multiple thematically named images were identified:</p>
+<ul>
+<li>salmon.jpeg</li>
+<li>salmon2.jpeg</li>
+<li>salmon3.jpeg</li>
+<li>salmon4.jpeg</li>
+<li>squirrel.jpeg</li>
+</ul>
+<p>Timestamps clustered around February 2, 2026 (~13:40–13:43 PST), which suggests deliberate batch creation or collection.</p>
+<p><img src="image-4.png" alt="alt text"></p>
+<p><strong>5.2 Document Artifacts</strong></p>
+<p>Under /home/user/Documents/, directories named salmon, salmon2, salmon3, salmon4, and squirrel contained text files describing types of salmon and squirrel. The timestamp clustering and consistent naming pattern indicate structured, intentional content creation rather than incidental storage.</p>
+<p><img src="image-5.png" alt="alt text"></p>
+<h2 id="6-application-level-activity">6. Application-Level Activity</h2>
+<p>Two key artifacts confirmed active user interaction:</p>
+<ul>
+<li>/home/user/.local/share/recently-used.xbel</li>
+<li>/home/user/.mozilla/firefox/.../places.sqlite</li>
+</ul>
+<p>The recently-used.xbel file recorded that the image files were opened in Firefox ESR. This demonstrates:</p>
+<ul>
+<li>Files were not merely stored</li>
+<li>They were intentionally accessed and viewed</li>
+</ul>
+<p>This corroborates filesystem timestamps and strengthens the behavioral timeline.
+<img src="image-6.png" alt="alt text">
+<img src="image-7.png" alt="alt text"></p>
+<h2 id="7-shell-editor-usage-corroboration">7. Shell &amp; Editor Usage Corroboration</h2>
+<p><strong>7.1 Bash History</strong>
+/home/user/.bash_history showed:</p>
+<ul>
+<li>Directory creation</li>
+<li>File renaming</li>
+<li>sudo usage</li>
+<li>su - invocation</li>
+</ul>
+<p>The presence of su - is important, since it initiates a full login shell as another user, loading that user’s environment.
+<img src="image-8.png" alt="alt text"></p>
+<p><strong>7.2 Vim Metadata</strong>
+Both /home/user/.viminfo and /home/squirrel/.viminfo contained file marks and jump lists confirming document editing activity</p>
+<p>This independently verifies file modification beyond simple presence on disk.
+<img src="image-9.png" alt="alt text"></p>
+<h2 id="8-cleartext-credential-discovery">8. Cleartext Credential Discovery</h2>
+<p>A significant artifact was discovered at:</p>
+<p>/home/user/Videos/GrizzlyVideos/CrazyGrizzlyVideos/grizzly</p>
+<p>This file contained plaintext credentials:</p>
+<pre class="hljs"><code><div>Username: squirrel
+pw: squirrel
+</div></code></pre>
+<p>This indicates insecure credential storage and provides a plausible mechanism explaining how cross-account access may have occurred.</p>
+<p><img src="image-10.png" alt="alt text"></p>
+<h2 id="9-confirmed-cross-account-activity">9. Confirmed Cross-Account Activity</h2>
+<p><strong>9.1 Login Database Evidence</strong>
+/var/log/wtmp.db (SQLite login database) confirmed authenticated session transitions
+<img src="image-11.png" alt="alt text">
+<strong>9.2 Target File Creation</strong>
+Within /home/squirrel/target, an ASCII file containing:</p>
+<p>“Good job, this is the end.”</p>
+<p>was identified</p>
+<p><img src="image-12.png" alt="alt text"></p>
+<p>squirrel’s .bash_history confirmed:</p>
+<ul>
+<li>Creation of temporary directories</li>
+<li>Editing of target using vim</li>
+<li>Subsequent removal of temporary directories</li>
+</ul>
+<p>This sequence demonstrates deliberate, interactive use of the squirrel account.</p>
+<p><img src="image-13.png" alt="alt text">
+<img src="image-14.png" alt="alt text"></p>
+<h2 id="10-deleted-files-unallocated-space">10. Deleted Files &amp; Unallocated Space</h2>
+<p>Deleted files and unallocated space were examined through Autopsy analysis. No additional suspicious or hidden artifacts were identified beyond the structured content described above.</p>
+<h2 id="11-conclusion">11. Conclusion</h2>
+<p>This Debian EXT4 system contained two interactive user accounts. Analysis confirmed:</p>
+<ul>
+<li>Structured content creation under the user account</li>
+<li>Insecure storage of plaintext credentials</li>
+<li>Execution of su - privilege transition</li>
+<li>Authenticated cross-account session activity</li>
+<li>Deliberate content creation under squirrel</li>
+<li>Correlated evidence across multiple independent artifact sources</li>
+<li>The artifacts are consistent and reinforcing. No contradictory or anomalous evidence was identified.</li>
+</ul>
+<p>Confidence Level: High</p>
+<h1 id="project-3-creating-and-analyzing-zfs-pools">Project 3: Creating and Analyzing ZFS Pools</h1>
+<h3 id="1---creating-the-zfs-evidence-image">1 - Creating the ZFS Evidence Image</h3>
+<p>Step 1: Configure VM and Add Virtual Disks</p>
+<p>First, download the Ubuntu Desktop ISO for VirtualBox at:
+<code>https://ubuntu.com/download/desktop</code></p>
+<p>In the VirtualBox manager, select the VM and click on settings. There go to storage -&gt; Controller: SATA, and add a hard disk. Then, create a new disk with the following settings:</p>
+<pre class="hljs"><code><div>Type: VDI
+Allocation: Dynamically Allocated
+Size: 10 GB
+Name: ZFS_Disk_1
+</div></code></pre>
+<p>Repeat this process to create a second disk:</p>
+<pre class="hljs"><code><div>Name: ZFS_Disk_2
+Size: 10 GB
+</div></code></pre>
+<h3 id="step-2---install-zfs">Step 2 - Install ZFS</h3>
+<p>Launch the VM using the Ubuntu ISO and install Ubuntu normally.</p>
+<p>Install ZFS utilities:</p>
+<pre class="hljs"><code><div>sudo apt update
+sudo apt install zfsutils-linux
+</div></code></pre>
+<p>Verify the installation:</p>
+<pre class="hljs"><code><div>zfs --version
+</div></code></pre>
+<h3 id="step-3---create-the-zfs-pool">Step 3 - Create the ZFS Pool</h3>
+<p>Create a mirrored ZFS pool:</p>
+<pre class="hljs"><code><div>sudo zpool create project_pool mirror sdb sdc
+</div></code></pre>
+<p>Verify the pool status:</p>
+<pre class="hljs"><code><div>zpool status
+</div></code></pre>
+<p>The pool should now be mounted at:</p>
+<pre class="hljs"><code><div>/project_pool
+</div></code></pre>
+<h3 id="step-4---add-data-and-create-snapshots">Step 4 - Add Data and Create Snapshots</h3>
+<p>Create an initial file:</p>
+<pre class="hljs"><code><div>echo &quot;Version 1: Basic Config&quot; | sudo tee /project_pool/file1.txt
+</div></code></pre>
+<p>Create the first snapshot:</p>
+<pre class="hljs"><code><div>sudo zfs snapshot project_pool@snap1
+</div></code></pre>
+<p>Continue modifying or adding files and creating additional snapshots to capture system changes.</p>
+<h3 id="step-5---plant-evidence-artifacts">Step 5 - Plant Evidence Artifacts</h3>
+<p><strong>Artifact 1 – Hidden Information Inside an Image</strong></p>
+<p>Download an image file:</p>
+<pre class="hljs"><code><div>monkey.jpeg
+</div></code></pre>
+<p>Create a secret message:</p>
+<pre class="hljs"><code><div>echo &quot;user: help pw: banana&quot; | sudo tee /project_pool/do_not_share.txt
+</div></code></pre>
+<p>Hide the message inside the image:</p>
+<pre class="hljs"><code><div>cat ~/Downloads/monkey.jpeg /project_pool/do_not_share.txt | sudo tee /project_pool/image.jpeg
+</div></code></pre>
+<p>Create a snapshot:</p>
+<pre class="hljs"><code><div>sudo zfs snapshot project_pool@snap3
+</div></code></pre>
+<p><strong>Artifact 2 – Deleting Evidence</strong></p>
+<p>Delete the original text file:</p>
+<pre class="hljs"><code><div>sudo rm /project_pool/do_not_share.txt
+</div></code></pre>
+<p>Modify image timestamps to obscure activity:</p>
+<pre class="hljs"><code><div>sudo touch -t 202510300132 /project_pool/image.jpeg
+</div></code></pre>
+<p>Clear shell history:</p>
+<pre class="hljs"><code><div>history -w
+rm ~/.bash_history
+</div></code></pre>
+<p>Create another snapshot:</p>
+<pre class="hljs"><code><div>sudo zfs snapshot project_pool@snap4
+Artifact 3 – Disguised Bash Script
+</div></code></pre>
+<p>Create a simple script:</p>
+<pre class="hljs"><code><div>echo '#!/bin/bash' | sudo tee /project_pool/malware.sh
+echo 'ping -c 4 8.8.8.8' | sudo tee -a /project_pool/malware.sh
+</div></code></pre>
+<p>Rename it to appear harmless:</p>
+<pre class="hljs"><code><div>sudo mv /project_pool/malware.sh /project_pool/holiday_photo.jpg
+</div></code></pre>
+<p>Create a snapshot:</p>
+<pre class="hljs"><code><div>sudo zfs snapshot project_pool@snap5
+</div></code></pre>
+<h3 id="step-6---finalize-evidence-and-export-zfs-pool">Step 6 - Finalize Evidence and Export ZFS Pool</h3>
+<p>Set the checksum algorithm:</p>
+<pre class="hljs"><code><div>sudo zfs set checksum=sha256 project_pool
+</div></code></pre>
+<p>Export the entire pool with snapshots:</p>
+<pre class="hljs"><code><div>sudo zfs send -Rw project_pool@snap6 &gt; ~/project3_finalevidence.zfs
+</div></code></pre>
+<p>Transfer the file using:</p>
+<ul>
+<li>scp</li>
+<li>Google Drive</li>
+<li>OneDrive</li>
+</ul>
+<p>To import later:</p>
+<pre class="hljs"><code><div>zfs receive
+</div></code></pre>
+<h3 id="step-7---verify-evidence-integrity">Step 7 - Verify Evidence Integrity</h3>
+<p>Compute the SHA256 hash:</p>
+<pre class="hljs"><code><div>sha256sum project3_finalevidence.zfs
+</div></code></pre>
+<p>Example output:</p>
+<pre class="hljs"><code><div>d39ccb4b6b3e253be46df10de73f9236fd86c2e628cccbd03af4b2cc7f3904b8  /home/me/project3_finalevidence.zfs
+</div></code></pre>
+<p><strong>Part 2 – Forensic Analysis Using Autopsy (Group 8)</strong></p>
+<p>This phase performs forensic analysis on a provided disk image.</p>
+<p>Digital forensics emphasizes reconstructing system activity from artifacts to determine what actions occurred on a system.</p>
+<p><strong>Step 1: Verify Integrity of the RAW Image</strong></p>
+<p>Run a SHA256 hash check:</p>
+<pre class="hljs"><code><div>Get-FileHash .\evidence_disk.raw -Algorithm SHA256
+</div></code></pre>
+<p>Example output:</p>
+<pre class="hljs"><code><div>SHA256
+62DB3E442F82805437D3DE60C575FAF04496DB4EE8E25BE90CD60879B837D1DF
+</div></code></pre>
+<p>Confirm the hash matches the provided value before proceeding.</p>
+<p><strong>Step 2: Load Image into Autopsy</strong></p>
+<p>Open Autopsy</p>
+<p>Create a New Case</p>
+<p>Select:</p>
+<pre class="hljs"><code><div>Add Data Source → Disk Image
+</div></code></pre>
+<p>Load the file:</p>
+<pre class="hljs"><code><div>evidence_disk.raw
+</div></code></pre>
+<p>Allow Autopsy to perform automated analysis.</p>
+<p>Artifact 1 – Orphan File Discovery
+File Metadata
+Name:
+img_evidence_disk.raw/$OrphanFiles/OrphanFile-13</p>
+<p>Type:
+File System</p>
+<p>MIME Type:
+application/octet-stream</p>
+<p>Size:
+0</p>
+<p>File Name Allocation:
+Unallocated</p>
+<p>Metadata Allocation:
+Unallocated</p>
+<p>Modified:
+2026-02-28 15:45:44 PST</p>
+<p>Accessed:
+2026-02-28 15:45:44 PST</p>
+<p>Created:
+2026-02-28 15:45:44 PST</p>
+<p>Changed:
+2026-02-28 15:45:51 PST
+Sleuth Kit istat Output
+inode: 13
+Not Allocated</p>
+<p>Group: 0
+Generation ID: 1553334934</p>
+<p>uid / gid: 0 / 0
+mode: rrw-r--r--</p>
+<p>Flags: Extents
+size: 0
+num of links: 0
+Inode Timestamps
+Accessed:      2026-02-28 15:45:44 PST
+File Modified: 2026-02-28 15:45:44 PST
+Inode Modified:2026-02-28 15:45:51 PST
+File Created:  2026-02-28 15:45:44 PST
+Deleted:       2026-02-28 15:45:51 PST
+Direct Blocks</p>
+<h1 id="assignment-4---memory-forensics">Assignment 4 - Memory Forensics</h1>
+<h3 id="environment-and-setup">Environment and Setup</h3>
+<p>Clone the Volatility3 repository from GitHub:</p>
+<pre class="hljs"><code><div>https://github.com/volatilityfoundation/volatility3
+</div></code></pre>
+<p>Download the Windows symbol files:</p>
+<pre class="hljs"><code><div>https://downloads.volatilityfoundation.org/volatility3/symbols/windows.zip
+</div></code></pre>
+<p>Uncompress the downloaded archive and move the extracted windows directory into the Volatility symbols directory:</p>
+<pre class="hljs"><code><div>volatility3/volatility3/symbols/windows
+</div></code></pre>
+<p>Open a terminal in the root directory of the Volatility repository which should just be volatility3</p>
+<p>Run the following command to verify that Volatility is installed correctly:</p>
+<pre class="hljs"><code><div>python3 vol.py --help
+</div></code></pre>
+<p>If plugin dependency errors appear, install the required modeuls using pip:</p>
+<pre class="hljs"><code><div>pip install pefile yara-python pycryptodome
+</div></code></pre>
+<p>A python virtual enevironment was used to isolate dependencies and prevent system level conflicts.</p>
+<h3 id="download-and-prepare-memory-image">Download and prepare memory image</h3>
+<p>The memory image used in this investigation was downlaoded and extracted from the provided course dataset.</p>
+<p>The compressed file memory_dump.hz was decompressed using the following command:</p>
+<pre class="hljs"><code><div>gunzip memory_dump.gz
+</div></code></pre>
+<p>This produced the raw memory image, <code>memory_dump</code></p>
+<p>The extracted memory image has a size of around 6.8 GB</p>
+<p>To verify that Volatility could correctly parse the memory image, the follow command was executed:</p>
+<pre class="hljs"><code><div>python3 vol.py -f ~/Downloads/extracted/memory_dump banners.Banners
+</div></code></pre>
+<p>Successful execution of this command will confirm that the memory image could be read by Volatility and that the Windows kernel banner could be detected.</p>
+<p>Next, the process list was examined to make sure that the analysis environment was functioning properly:</p>
+<pre class="hljs"><code><div>python3 vol.py -f ~/Downloads/extracted/memory_dump windows.pslist.PsList
+</div></code></pre>
+<p>After confirming that the process list could be extractd successfully, the memory image was ready for forensic investigation.</p>
+<h3 id="memory-forensics-analysis-memorydump">Memory Forensics Analysis: memory_dump</h3>
+<p>Data Integrity</p>
+<p>Filename: memory_dump
+SHA-256 Hash:
+4d649e4448c3b513b1aa688bbf421a2d95cf4b18fc3c935f12f56f8cac91f07a</p>
+<p>The SHA-256 hash of the extracted memory image was calculated prior to analysis to ensure the integrity of the forensic evidence. Hash verification establishes a bseline fingerprint for the file and confirms that the memory image remained unchanged throughout the investigation.</p>
+<ol>
+<li>Suspicious Process Identification: PID 8812, ChromeX.exe</li>
+</ol>
+<pre class="hljs"><code><div>Command Used:
+python3 vol.py -f ~/Downloads/extracted/memory_dump windows.pslist.PsList
+</div></code></pre>
+<p>The system's process list revealed a process named ChromeX.exe with PID 8812. This process is considered suspicious because its name closely resembles the legit Google Chrome browser but contains and additional &quot;X&quot;. This naming pattern is commonly used by malware to hide as trusted software while avoiding immediate detection.</p>
+<p>Upon further inspection of the process create time showed the ChromeX.exe started at 14:18:07 UTC which is significantly later than core system processes that start during system boot. This behaviour suggested that the executable was launched manually or by a user level action rather than by the operating system.</p>
+<ol start="2">
+<li>Full Executable Path: C:\Users\developer\Downloads\ChromeX.exe</li>
+</ol>
+<p>Command Used:</p>
+<pre class="hljs"><code><div>python3 vol.py -f ~/Downloads/extracted/memory_dump windows.cmdline.CmdLine --pid 8812
+</div></code></pre>
+<p>The cmdline plugin was used to retrieve the command line arguments associated with the suspicious process.</p>
+<p>The output showed that ChromeX.exe was executed from the following path</p>
+<pre class="hljs"><code><div>C:\Users\developer\Downloads\ChromeX.exe
+</div></code></pre>
+<p><img src="4image.png" alt="alt text">
+This location is important since the Downloads directory is a common location for user downloaded files and malware. Legit applications are usually installed in directories like:
+C:\Program Files
+C:\Program Files (x86)</p>
+<p>Running executable directly from a user's Downloads folder is unusual for legit software and therefore strengthens the suspicion that the ChromeX.exe is a malicious process that's hiding as a legit browser process.</p>
+<ol start="3">
+<li>Process Behavior and Loaded Libraries</li>
+</ol>
+<p>Command Used:</p>
+<pre class="hljs"><code><div>python3 vol.py -f ~/Downloads/extracted/memory_dump windows.dlllist.DllList --pid 8812
+</div></code></pre>
+<p>The dlllist plugin was used to examine the dynamic link libraries loaded by the suspicious process ChromeX.exe. Loaded libraries provide insight into the capabilities and behavior of a process.</p>
+<p>Analysis revealed that the process loaded several Windows system libraries including:</p>
+<p>ucrtbase.dll
+C:\Windows\System32\ucrtbase.dll</p>
+<p>mswsock.dll
+C:\Windows\System32\mswsock.dll
+<img src="4image-1.png" alt="alt text"></p>
+<p>The presence of mswsock.dll is particularly significant because this library provides Windows networking functionality through the Winsock API. Malware can usually load netowkring libarries in order to estblish communication with external systems.
+The loading of netowking related libaries indicate that ChromeX.exe likely possessed the capability to initiate outbout network connections which is consistent with the behavior of remote access malware or command and control implants.</p>
+<ol start="4">
+<li>Extraction of Suspicious Executable from Memory</li>
+</ol>
+<p>Command Used:</p>
+<pre class="hljs"><code><div>python3 vol.py -f ~/Downloads/extracted/memory_dump windows.dumpfiles.DumpFiles --pid 8812
+</div></code></pre>
+<p>The dumpfiles plugin was used to extract file objects associated with the suspicious process ChromeX.exe directly from the memory image. This allows investigators to recover executable artifacts that were loaded into memory at the time the system snapshot was captured.</p>
+<p>The following files were successfully recovered:</p>
+<pre class="hljs"><code><div>file.0x860fd50276c0.0x860fccddecb0.DataSectionObject.ChromeX.exe.dat
+file.0x860fd50276c0.0x860fd50f8a20.ImageSectionObject.ChromeX.exe.img
+</div></code></pre>
+<p>These files represent the data and executable sections of the ChromeX.exe binary as it existed in system memory.</p>
+<p>To preserve the integrity of the recovered artifacts, we calculated SHA-256 hashes:</p>
+<pre class="hljs"><code><div>SHA-256: 0758ae0fedf4b4345c3d879481a6338b4980c9ab64bb591f4a736a5547975515
+SHA-256: 09e2a819247a75b0de5cad6fe0a2812f38582ffdcef705edbe737678bb55299b
+</div></code></pre>
+<ol start="5">
+<li>Indicators Discovered in the Extracted Executable</li>
+</ol>
+<p>Command Used:</p>
+<pre class="hljs"><code><div>strings file.*ChromeX.exe.* | grep -E &quot;13.60|WriteProcessMemory|ZwOpenProcess&quot;
+</div></code></pre>
+<p>To further analyze the recovered executable, the strings utility was used to extract human-readable text embedded within the binary. This technique revealed internal metadata, API usage, and network indicators that may not be immediately noticable through standard memory analysis tools.</p>
+<p>The analysis showed several suspicious artifacts including:</p>
+<p>13.60.193.87
+WriteProcessMemory
+ZwOpenProcess
+htb.pdb</p>
+<p><img src="4image-2.png" alt="alt text"></p>
+<p>The IP address 13.60.193.87 appears directly within the executable, which suggests that the program may attempt to communicate with a remote host. Hard-coded IP addresses can be commonly used by malware to establish communication with command-and-control infrastructure.</p>
+<p>The presence of the Windows API functions WriteProcessMemory and ZwOpenProcess is also notable. These functions are frequently used by malware for process injection and memory manipulation, allowing malicious code to execute inside other processes.</p>
+<p>Also, the string htb.pdb references a debugging symbol file generated during compilation. Embedded debugging paths can reveal developer build environments and further suggest that the binary was custom-built rather than part of a legitimate software distribution.</p>
+<h3 id="conclusion">Conclusion</h3>
+<p>The forensic investigation of the provided memory image identified a suspicious executable named ChromeX.exe with PID 8812. The process name closely mimics the legitimate Chrome browser but contains an additional character, indicating a likely attempt at trying to blend in.</p>
+<p>Analysis revealed that the executable was launched from C:\Users\developer\Downloads, which is an unusual location for legitimate system applications. Examination of the process environment confirmed the loading of networking-related libraries and the presence of system handles associated with console interaction.</p>
+<p>The executable was successfully extracted from memory using Volatility's dumpfiles plugin, and cryptographic hashes were generated to preserve the recovered artifacts. Further analysis of the binary revealed embedded indicators including the IP address 13.60.193.87 and Windows API calls commonly used for process manipulation.</p>
+<p>Based on what we've found, we conclude that ChromeX.exe is highly likely to be a malicious program designed to hide as a legitimate application while communicating with an external host and performing potentially harmful actions on the system.</p>
+
+</body>
+</html>
